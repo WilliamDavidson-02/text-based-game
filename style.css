@@ -17,7 +17,6 @@
 body {
   height: 100vh;
   max-height: 100vh;
-  width: 100vw;
   margin: 0;
   padding: 0;
   background: var(--bg-color-dark);
@@ -31,7 +30,7 @@ input[type="text"] {
   border-radius: 5px;
   outline: none;
   font-size: 1rem;
-  padding: 5px;
+  padding: 5px 10px;
   width: 100%;
 }
 
@@ -43,22 +42,35 @@ button {
 
 main {
   width: 100%;
-  max-width: 1600px;
   height: 100%;
-  padding: 0 20px;
+  padding: 0 10px;
   margin: 0 auto;
   display: flex;
   gap: 10px;
 }
 
+h3 {
+  margin: 0;
+  font-weight: 500;
+}
+
 .player-info-container {
   height: calc(100% - 20px);
   width: 20%;
-  padding: 0 10px;
+  padding: 10px;
   margin: 10px 0;
   border: var(--border);
   border-radius: 5px;
   background: var(--bg-color-light);
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
+
+.player-info-child {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
 }
 
 .game-container {
@@ -90,6 +102,13 @@ main {
   border: 1px solid var(--orange);
   display: flex;
   align-items: center;
+  transition: 0.3s;
+}
+
+.btn:hover {
+  transition: 0.3s;
+  background: var(--orange);
+  color: var(--bg-color-light);
 }
 
 .fa-arrow-right {
@@ -103,4 +122,46 @@ main {
   border-radius: 5px;
   padding: 5px 10px;
   width: 100%;
+}
+
+.small-dark-tx {
+  color: var(--text-color-dark);
+  font-weight: 300;
+}
+
+.player-info {
+  padding: 10px;
+  border: 1px solid var(--text-color-light);
+  border-radius: 5px;
+}
+
+.story-container {
+  max-height: calc(100% - 20px);
+  overflow-y: auto;
+}
+
+.story {
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+}
+
+.brown-btn {
+  width: 100%;
+  text-align: center;
+  padding: 10px 0;
+  background: none;
+  border: 1px solid var(--text-color-light);
+  border-radius: 5px;
+  color: var(--text-color-light);
+  letter-spacing: 2px;
+  font-size: 1rem;
+  font-weight: 500;
+  transition: 0.3s;
+}
+
+.brown-btn:hover {
+  background: var(--text-color-light);
+  color: var(--bg-color-light);
+  transition: 0.3s;
 }

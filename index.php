@@ -2,13 +2,24 @@
 
 session_start();
 
+if (isset($_POST['reset'])) {
+    unset($_SESSION['player']);
+    unset($_SESSION['storyLine']);
+    unset($_SESSION['errorMessage']);
+
+    header('Location: ' . $_SERVER['PHP_SELF']);
+    exit;
+}
+
 require_once __DIR__ . '/rooms.php';
+require_once __DIR__ . '/functions.php';
 
 $commands = [
     'directions' => ['north', 'west', 'south', 'east'],
     'room_interactions' => ['look', 'take', 'move']
 ];
-$errorMessage = null;
+
+$errorMessage = isset($_SESSION['errorMessage']) ? $_SESSION['errorMessage'] : '';
 
 if (!isset($_SESSION['player'])) {
     $_SESSION['player'] = [
@@ -18,53 +29,89 @@ if (!isset($_SESSION['player'])) {
     ];
 }
 
+if (!isset($_SESSION['storyLine'])) {
+    $_SESSION['storyLine'] = [
+        [
+            'command' => 'Beginning',
+            'story' => $rooms['forest_entrance']['description']
+        ],
+        [
+            'command' => 'Lost in the Enchanted Forest',
+            'story' => 'You find yourself in a dense, mysterious forest. The air is thick with magic, and the trees seem to whisper secrets. Your goal is to find the legendary Fountain of Wisdom, rumoured to grant knowledge beyond imagination. Along the way, you\'ll encounter challenges, collect items, and meet mystical creatures.'
+        ]
+    ];
+}
+
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+    $_SESSION['errorMessage'] = '';
     [$actionType, $action] = explode(' ', $_POST['command']);
     switch (strtolower($actionType)) {
         case 'move':
             if (array_key_exists(strtolower($action), $rooms[$_SESSION['player']['current_room']]['connection'])) {
                 $_SESSION['player']['current_room'] = $rooms[$_SESSION['player']['current_room']]['connection'][strtolower($action)];
+                $newPart = [
+                    'command' => $_POST['command'],
+                    'story' => $rooms[$_SESSION['player']['current_room']]['description']
+                ];
+                array_unshift($_SESSION['storyLine'], $newPart);
+            } else {
+                createErrorMsg("Hmm there seams to be no leading path to $action, maybe try a different direction ?");
             }
             break;
         case 'look':
 
             break;
         default:
-            $errorMessage = "You are unable to $actionType.";
+            createErrorMsg("You are unable to $actionType");
     }
 
-    // save prev commands, - 6 to get the 5 latest in the array.
+    // save prev commands, - 5 to get the 5 latest in the array.
     $_SESSION['player']['prev_commands'][] = $_POST['command'];
 
     if (count($_SESSION['player']['prev_commands']) > 5) {
-        array_splice($_SESSION['player']['prev_commands'], count($_SESSION['player']['prev_commands']) - 6);
+        $_SESSION['player']['prev_commands'] = array_splice($_SESSION['player']['prev_commands'], count($_SESSION['player']['prev_commands']) - 5);
     }
     // preventing same action to run again if page is reloaded.
     header('Location: ' . $_SERVER['PHP_SELF']);
     exit;
 }
 
+// Redo current room string to a nice title.
+$titleExplode = explode('_', $_SESSION['player']['current_room']);
+$roomTitle = ucwords(implode(' ', $titleExplode));
+
 require_once __DIR__ . '/header.php'; ?>
 <main>
     <section class="player-info-container">
-        <!-- player info -->
-        <div>
-            <h3>Player inventory</h3>
+        <div class="player-info-child">
+            <div class="player-info">
+                <h3>Player inventory</h3>
+            </div>
+            <div class="player-info">
+                <h3>Player commands</h3>
+                <?php foreach ($_SESSION['player']['prev_commands'] as $command) : ?>
+                    <div class="small-dark-tx"><?= $command; ?></div>
+                <?php endforeach; ?>
+            </div>
         </div>
-        <div>
-            <h3>Player commands</h3>
-            <?php foreach ($_SESSION['player']['prev_commands'] as $command) : ?>
-                <div><?= $command; ?></div>
-            <?php endforeach; ?>
-        </div>
+        <form method="post">
+            <button type="submit" name="reset" class="brown-btn">New Game</button>
+        </form>
     </section>
     <section class="game-container">
-        <div>
-            <h1><?= $_SESSION['player']['current_room']; ?></h1>
-            <div><?= $rooms[$_SESSION['player']['current_room']]['description']; ?></div>
+        <div class="story-container">
+            <h1><?= $roomTitle; ?></h1>
+            <div class="story">
+                <?php foreach ($_SESSION['storyLine'] as $description) : ?>
+                    <div>
+                        <p class="small-dark-tx"><?= $description['command'] ?></p>
+                        <p><?= $description['story'] ?></p>
+                    </div>
+                <?php endforeach; ?>
+            </div>
         </div>
         <form class="form-command" method="post">
-            <?php if ($errorMessage !== null) : ?>
+            <?php if ($errorMessage !== '') : ?>
                 <div class="error-container"><?= $errorMessage; ?></div>
             <?php endif; ?>
             <div class="input-container">

@@ -2,7 +2,7 @@
 
 $rooms = [
     'forest_entrance' => [
-        'description' => 'You stand at the entrance of the forest. Towering trees loom overhead, their branches reaching for the sky. The air is cool and carries a faint scent of moss and earth. Look around before you begin you adventure.',
+        'description' => 'You stand at the entrance of the forest. Towering trees loom overhead, their branches reaching for the sky. The air is cool and carries a faint scent of moss and earth. Before you begin your adventure take a look around',
         'actions' => [
             'look' => ['You notice a glimmering object half-buried in the soft soil.'],
             'take' => 'As you pick it up, a mysterious energy pulses through your veins, urging you north.'
