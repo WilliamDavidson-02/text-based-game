@@ -44,24 +44,37 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     exit;
 }
 
-require_once __DIR__ . '/header.php';
-?>
-<?php if ($errorMessage !== null) : ?>
-    <div><?= $errorMessage; ?></div>
-<?php endif; ?>
-<div class="">
-    <div>
-        <h1><?= $_SESSION['player']['current_room']; ?></h1>
-        <div><?= $rooms[$_SESSION['player']['current_room']]['description']; ?></div>
-    </div>
-    <div>
-        <?php foreach ($_SESSION['player']['prev_commands'] as $command) : ?>
-            <div><?= $command; ?></div>
-        <?php endforeach; ?>
-    </div>
-</div>
-<form method="post">
-    <input name="command" type="text">
-</form>
+require_once __DIR__ . '/header.php'; ?>
+<main>
+    <section class="player-info-container">
+        <!-- player info -->
+        <div>
+            <h3>Player inventory</h3>
+        </div>
+        <div>
+            <h3>Player commands</h3>
+            <?php foreach ($_SESSION['player']['prev_commands'] as $command) : ?>
+                <div><?= $command; ?></div>
+            <?php endforeach; ?>
+        </div>
+    </section>
+    <section class="game-container">
+        <div>
+            <h1><?= $_SESSION['player']['current_room']; ?></h1>
+            <div><?= $rooms[$_SESSION['player']['current_room']]['description']; ?></div>
+        </div>
+        <form class="form-command" method="post">
+            <?php if ($errorMessage !== null) : ?>
+                <div class="error-container"><?= $errorMessage; ?></div>
+            <?php endif; ?>
+            <div class="input-container">
+                <input autofocus autocomplete="off" placeholder="e.g move north" name="command" type="text">
+                <button type="submit" class="btn">
+                    <i class="fa-solid fa-arrow-right"></i>
+                </button>
+            </div>
+        </form>
+    </section>
+</main>
 
 <?php require_once __DIR__ . '/footer.php'; ?>

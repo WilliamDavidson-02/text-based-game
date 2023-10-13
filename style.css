@@ -15,8 +15,9 @@
 }
 
 body {
-  max-width: 100vw;
   height: 100vh;
+  max-height: 100vh;
+  width: 100vw;
   margin: 0;
   padding: 0;
   background: var(--bg-color-dark);
@@ -31,4 +32,75 @@ input[type="text"] {
   outline: none;
   font-size: 1rem;
   padding: 5px;
+  width: 100%;
+}
+
+button {
+  outline: none;
+  cursor: pointer;
+  padding: 0px 10px;
+}
+
+main {
+  width: 100%;
+  max-width: 1600px;
+  height: 100%;
+  padding: 0 20px;
+  margin: 0 auto;
+  display: flex;
+  gap: 10px;
+}
+
+.player-info-container {
+  height: calc(100% - 20px);
+  width: 20%;
+  padding: 0 10px;
+  margin: 10px 0;
+  border: var(--border);
+  border-radius: 5px;
+  background: var(--bg-color-light);
+}
+
+.game-container {
+  width: 80%;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
+
+.form-command {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  width: 100%;
+  padding: 10px 0;
+}
+
+.input-container {
+  display: flex;
+  gap: 10px;
+  height: 37px;
+}
+
+.btn {
+  height: 100%;
+  border-radius: 5px;
+  background: none;
+  color: var(--orange);
+  border: 1px solid var(--orange);
+  display: flex;
+  align-items: center;
+}
+
+.fa-arrow-right {
+  font-size: 1.2rem;
+  line-height: 0%;
+}
+
+.error-container {
+  color: var(--orange);
+  border: 1px solid var(--orange);
+  border-radius: 5px;
+  padding: 5px 10px;
+  width: 100%;
 }
