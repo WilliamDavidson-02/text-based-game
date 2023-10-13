@@ -1,0 +1,34 @@
+* {
+  box-sizing: border-box;
+  font-family: "Poppins", sans-serif;
+}
+
+:root {
+  --bg-color-dark: #282828;
+  --bg-color-light: #3b3935;
+  --border-color: #3f3d38;
+  --text-color-dark: #9b917b;
+  --text-color-light: #eddab5;
+  --orange: #ff8038;
+
+  --border: 1px solid var(--border-color);
+}
+
+body {
+  max-width: 100vw;
+  height: 100vh;
+  margin: 0;
+  padding: 0;
+  background: var(--bg-color-dark);
+  color: var(--text-color-light);
+}
+
+input[type="text"] {
+  background: var(--bg-color-light);
+  color: var(--text-color-light);
+  border: var(--border);
+  border-radius: 5px;
+  outline: none;
+  font-size: 1rem;
+  padding: 5px;
+}
