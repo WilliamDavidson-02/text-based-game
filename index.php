@@ -49,20 +49,32 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         case 'move':
             if (array_key_exists(strtolower($action), $rooms[$_SESSION['player']['current_room']]['connection'])) {
                 $_SESSION['player']['current_room'] = $rooms[$_SESSION['player']['current_room']]['connection'][strtolower($action)];
-                $newPart = [
-                    'command' => $_POST['command'],
-                    'story' => $rooms[$_SESSION['player']['current_room']]['description']
-                ];
-                array_unshift($_SESSION['storyLine'], $newPart);
+                addToStory($_POST['command'], $rooms[$_SESSION['player']['current_room']]['description']);
             } else {
                 createErrorMsg("Hmm there seams to be no leading path to $action, maybe try a different direction ?");
             }
             break;
         case 'look':
-
+            if (array_key_exists(strtolower($actionType), $rooms[$_SESSION['player']['current_room']]['actions'])) {
+                foreach ($rooms[$_SESSION['player']['current_room']]['actions']['look'] as $looks) {
+                    foreach ($_SESSION['storyLine'] as $story) {
+                        if ($story['story'] === $looks) {
+                            $sameStory = true;
+                            break;
+                        }
+                    }
+                    if (!$sameStory) {
+                        addToStory($_POST['command'], $looks);
+                    } else {
+                        createErrorMsg("Nothing more to see here.");
+                    }
+                }
+            } else {
+                createErrorMsg("Nothing special to look at here.");
+            }
             break;
         default:
-            createErrorMsg("You are unable to $actionType");
+            createErrorMsg("You are unable to $actionType.");
     }
 
     // save prev commands, - 5 to get the 5 latest in the array.
@@ -115,7 +127,7 @@ require_once __DIR__ . '/header.php'; ?>
                 <div class="error-container"><?= $errorMessage; ?></div>
             <?php endif; ?>
             <div class="input-container">
-                <input autofocus autocomplete="off" placeholder="e.g move north" name="command" type="text">
+                <input autofocus autocomplete="off" placeholder="e.g move, look or take" name="command" type="text">
                 <button type="submit" class="btn">
                     <i class="fa-solid fa-arrow-right"></i>
                 </button>

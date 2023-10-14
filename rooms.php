@@ -2,7 +2,7 @@
 
 $rooms = [
     'forest_entrance' => [
-        'description' => 'You stand at the entrance of the forest. Towering trees loom overhead, their branches reaching for the sky. The air is cool and carries a faint scent of moss and earth. Before you begin your adventure take a look around',
+        'description' => 'You stand at the entrance of the forest. Towering trees loom overhead, their branches reaching for the sky. The air is cool and carries a faint scent of moss and earth. Before you begin your adventure take a look',
         'actions' => [
             'look' => ['You notice a glimmering object half-buried in the soft soil.'],
             'take' => 'As you pick it up, a mysterious energy pulses through your veins, urging you north.'
@@ -23,7 +23,7 @@ $rooms = [
         'description' => 'This grove feels alive with magic. The trees here have faces carved into their bark, and they seem to murmur secrets to each other. A soft, ethereal light bathes the area, creating an otherworldly atmosphere.',
         'actions' => [
             'look' => ['A stone pedestal at the center of the grove holds a mysterious, ornate box.'],
-            'take' => 'You take the ornate box, the box is locked.',
+            'take' => 'You pick up the ornate box, the box is locked.',
             'use' => ['key' => 'This key dose not work on the ornate box']
         ],
         'item' => ['ornate box'],
