@@ -57,13 +57,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         case 'look':
             if (array_key_exists(strtolower($actionType), $rooms[$_SESSION['player']['current_room']]['actions'])) {
                 foreach ($rooms[$_SESSION['player']['current_room']]['actions']['look'] as $looks) {
-                    foreach ($_SESSION['storyLine'] as $story) {
-                        if ($story['story'] === $looks) {
-                            $sameStory = true;
-                            break;
-                        }
-                    }
-                    if (!$sameStory) {
+                    if (!isSameStory($looks)) {
                         addToStory($_POST['command'], $looks);
                     } else {
                         createErrorMsg("Nothing more to see here.");
@@ -71,6 +65,21 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 }
             } else {
                 createErrorMsg("Nothing special to look at here.");
+            }
+            break;
+        case 'take':
+            // get item and remove action type from explode and implode item in to one word.
+            $action = $rooms[$_SESSION['player']['current_room']]['actions'];
+            if (array_key_exists(strtolower($actionType), $action)) {
+                $item = implode(' ', array_splice(explode(' ', $_POST['command']), 1));
+                if (!isSameStory($action['take'][$item])) {
+                    addToStory($_POST['command'], $action['take'][$item]);
+                    $_SESSION['player']['inventory'][] = $item;
+                } else {
+                    createErrorMsg("You have already picked up $item");
+                }
+            } else {
+                createErrorMsg("Nothing to take here.");
             }
             break;
         default:
@@ -98,6 +107,9 @@ require_once __DIR__ . '/header.php'; ?>
         <div class="player-info-child">
             <div class="player-info">
                 <h3>Player inventory</h3>
+                <?php foreach ($_SESSION['player']['inventory'] as $item) : ?>
+                    <div class="small-dark-tx"><?= $item; ?></div>
+                <?php endforeach; ?>
             </div>
             <div class="player-info">
                 <h3>Player commands</h3>
@@ -115,7 +127,7 @@ require_once __DIR__ . '/header.php'; ?>
             <h1><?= $roomTitle; ?></h1>
             <div class="story">
                 <?php foreach ($_SESSION['storyLine'] as $description) : ?>
-                    <div>
+                    <div class="story-card">
                         <p class="small-dark-tx"><?= $description['command'] ?></p>
                         <p><?= $description['story'] ?></p>
                     </div>
