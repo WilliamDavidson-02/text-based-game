@@ -7,7 +7,6 @@ $rooms = [
             'look' => ['You notice a shimmering object half-buried in the soft soil.', 'There seams to be a path north.'],
             'take' => ['shimmering object' => 'As you pick it up, a mysterious energy pulses through your veins, urging you north.']
         ],
-        'item' => ['shimmering object'],
         'connection' => ['north' => 'mystical_clearing']
     ],
     'mystical_clearing' => [
@@ -16,7 +15,6 @@ $rooms = [
             'look' => ['A delicate silver key hangs from a low branch, catching the light.', 'West of you there is something whispering, what could it be.'],
             'take' => ['silver key' => 'With the key in hand, you feel a sense of purpose.']
         ],
-        'item' => ['silver key'],
         'connection' => ['west' => 'whispering_grove', 'south' => 'forest_entrance']
     ],
     'whispering_grove' => [
@@ -24,9 +22,7 @@ $rooms = [
         'actions' => [
             'look' => ['A stone pedestal at the center of the grove holds a mysterious, ornate box.'],
             'take' => ['ornate box' => 'You picked up the ornate box, the box is locked.'],
-            'use' => ['key' => 'This key dose not work on the ornate box']
         ],
-        'item' => ['ornate box'],
         'connection' => ['east' => 'mystical_clearing']
     ],
 ];
