@@ -2,6 +2,9 @@
 
 session_start();
 
+require_once __DIR__ . '/rooms.php';
+require_once __DIR__ . '/functions.php';
+
 if (isset($_POST['reset'])) {
     unset($_SESSION['player']);
     unset($_SESSION['storyLine']);
@@ -10,9 +13,6 @@ if (isset($_POST['reset'])) {
     header('Location: ' . $_SERVER['PHP_SELF']);
     exit;
 }
-
-require_once __DIR__ . '/rooms.php';
-require_once __DIR__ . '/functions.php';
 
 $commands = [
     'directions' => ['north', 'west', 'south', 'east'],
@@ -40,6 +40,7 @@ if (!isset($_SESSION['player'])) {
         'current_room' => 'forest_entrance',
         'inventory' => [],
         'prev_commands' => [],
+        'health' => 100,
     ];
 }
 
@@ -135,7 +136,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 if ($itemRules[$itemToUse]['on'] === $itemToUseOn) {
                     // check if there is a room the item has to be used in.
                     if (array_key_exists('room', $itemRules[$itemToUse])) {
-                        if ($itemRules[$itemToUse]['room'] !== $_SESSION['player']['current_room']) {
+                        if (isPlayerInRoom($itemRules[$itemToUse]['room'])) {
                             createErrorMsg("You seam to be in the wrong place to use $itemToUse");
                             break;
                         }
@@ -147,7 +148,25 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                     createErrorMsg("You are unable to use $itemToUse on $itemToUseOn");
                 }
             }
-
+            break;
+        case 'ask':
+            if (isPlayerInRoom('whispering_grove')) {
+                // removes ask from string and gets the who it is directed to.
+                $question = implode(' ', array_splice(explode(' ', $_POST['command']), 1));
+                if (strtolower($question) === 'trees') {
+                    addToStory($_POST['command'], $rooms[$_SESSION['player']['current_room']]['actions']['ask']);
+                } else {
+                    createErrorMsg("Who is $question ?");
+                }
+            } else {
+                createErrorMsg("You are talking to your self.");
+            }
+            break;
+        case 'attack':
+            if (isPlayerInRoom('goblin\'s_hideout')) {
+            } else {
+                createErrorMsg("Relax, no enemies nearby.");
+            }
             break;
         default:
             createErrorMsg("You are unable to $actionType.");

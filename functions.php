@@ -22,8 +22,12 @@ function isSameStory(string $value): bool
     foreach ($_SESSION['storyLine'] as $story) {
         if ($story['story'] === $value) {
             return true;
-        } else {
-            return false;
         }
     }
+    return false;
+}
+
+function isPlayerInRoom(string $room): bool
+{
+    return $_SESSION['player']['current_room'] === $room ? true : false;
 }
