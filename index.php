@@ -32,16 +32,31 @@ $itemRules = [
         As you leave the enchanted forest, you are forever changed. The knowledge you gained will shape your destiny, and the memories of this mystical journey will forever reside in your heart.
         <br/><br/>
         Congratulations, brave adventurer. You have completed your quest."
+    ],
+    'mushroom' => [
+        'on' => 'me',
+        'story' => 'You eat the mushroom, and now you hare feeling a 100%'
     ]
 ];
 
 if (!isset($_SESSION['player'])) {
     $_SESSION['player'] = [
         'current_room' => 'forest_entrance',
-        'inventory' => [],
+        'inventory' => ['me'],
         'prev_commands' => [],
         'health' => 100,
-        'enemies' => ['goblin' => 100],
+        'enemies' => [
+            'goblin' => [
+                'health' => 100,
+                'damage' => 10,
+                'room' => 'goblin\'s_hideout'
+            ],
+            'spider' => [
+                'health' => 100,
+                'damage' => 50,
+                'room' => 'spider\'s_lair'
+            ]
+        ],
     ];
 }
 
@@ -142,6 +157,11 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                         } else {
                             createErrorMsg("You seam to be in the wrong place to use $itemToUse");
                         }
+                    } else {
+                        if ($itemToUse === 'mushroom') {
+                            $_SESSION['player']['health'] = 100;
+                            addToStory($_POST['command'], $itemRules[$itemToUse]['story']);
+                        }
                     }
                 } else {
                     createErrorMsg("You are unable to use $itemToUse on $itemToUseOn");
@@ -162,20 +182,20 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             }
             break;
         case 'attack':
-            if (isPlayerInRoom('goblin\'s_hideout')) {
-                $victim = implode(' ', array_splice($command, 1));
+            $victim = implode(' ', array_splice($command, 1));
+            if (isPlayerInRoom($_SESSION['player']['enemies'][$victim]['room'])) {
                 if (array_key_exists(strtolower($victim), $_SESSION['player']['enemies'])) {
                     $dominator = rand(0, 2);
 
                     if ($dominator == 0) {
-                        // Player wins, subtract 20 from enemy's health
-                        $_SESSION['player']['enemies'][$victim] -= 20;
+                        // Player wins
+                        $_SESSION['player']['enemies'][$victim]['health'] -= in_array('sword', $_SESSION['player']['inventory']) ? 40 : 5;
                     } elseif ($dominator == 2) {
-                        // Enemy wins, subtract 20 from player's health
-                        $_SESSION['player']['health'] -= 20;
+                        // Enemy wins
+                        $_SESSION['player']['health'] -= $_SESSION['player']['enemies'][$victim]['damage'];
                     }
 
-                    if ($_SESSION['player']['enemies'][$victim] <= 0) {
+                    if ($_SESSION['player']['enemies'][$victim]['health'] <= 0) {
                         addToStory($_POST['command'], $rooms[$_SESSION['player']['current_room']]['actions']['attack']['kill']);
                     } else {
                         addToStory($_POST['command'], $rooms[$_SESSION['player']['current_room']]['actions']['attack']['story'][$dominator]);

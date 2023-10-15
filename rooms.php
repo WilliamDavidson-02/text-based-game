@@ -32,50 +32,54 @@ $rooms = [
         'actions' => [
             'look' => ['In the center of the hideout, you spot the menacing figure of a goblin, its wiry form hunched over, guarding the passage that leads deeper into the forest. Its eyes gleam with a malevolent glint, and a wicked grin stretches across its twisted face. The creature brandishes a crude, serrated blade, clearly intent on preventing anyone from advancing further.'],
             'attack' => [
-                'story' => ['You swiftly unsheathes their sword and lunges at the goblin. The blade connects, dealing a solid blow. The goblin grimaces, clearly wounded.', 'In a tense exchange, the player and goblin clash with equal force. Blades meet, but neither side gains the upper hand.', 'As the player lunges, the goblin anticipates and counters with a swift strike of its own. The blade finds its mark, delivering a sharp blow. The player staggers back, feeling the sting of the attack, while the goblin grins, seizing the upper hand in the skirmish.'],
-                'kill' => 'The goblin lies defeated, its menacing presence replaced by stillness. The player stands victorious, their breath steadying. The hideout is now a silent witness to the battle\'s end.'
+                'story' => ['You swiftly unsheathes their sword and lunges at the goblin. The blade connects, dealing a solid blow. The goblin grimaces, clearly wounded.', 'In a tense exchange, you and goblin clash with equal force. Blades meet, but neither side gains the upper hand.', 'As you lunge, the goblin anticipates and counters with a swift strike of its own. The blade finds its mark, delivering a sharp blow. You staggers back, feeling the sting of the attack, while the goblin grins, seizing the upper hand in the skirmish.'],
+                'kill' => 'The goblin lies defeated, its menacing presence replaced by stillness. You stands victorious, the hideout is now a silent witness to the battle\'s end. The Enchanted Glen is east of you once blocked by the goblin no is free to pass'
             ]
         ],
-        'connection' => ['south' => 'whispering_grove']
+        'connection' => ['south' => 'whispering_grove', 'east' => 'enchanted_glen']
     ],
-    // '' => [
-    //     'description' => '',
-    //     'actions' => [
-    //         'look' => [''],
-    //         'take' => ['' => ''],
-    //     ],
-    //     'connection' => ['' => '']
-    // ],
-    // '' => [
-    //     'description' => '',
-    //     'actions' => [
-    //         'look' => [''],
-    //         'take' => ['' => ''],
-    //     ],
-    //     'connection' => ['' => '']
-    // ],
-    // '' => [
-    //     'description' => '',
-    //     'actions' => [
-    //         'look' => [''],
-    //         'take' => ['' => ''],
-    //     ],
-    //     'connection' => ['' => '']
-    // ],
-    // '' => [
-    //     'description' => '',
-    //     'actions' => [
-    //         'look' => [''],
-    //         'take' => ['' => ''],
-    //     ],
-    //     'connection' => ['' => '']
-    // ],
-    // '' => [
-    //     'description' => '',
-    //     'actions' => [
-    //         'look' => [''],
-    //         'take' => ['' => ''],
-    //     ],
-    //     'connection' => ['' => '']
-    // ],
+    'enchanted_glen' => [
+        'description' => 'A hidden glen where time seems to stand still. Vibrant, luminescent mushrooms carpet the ground, casting an enchanting glow. A gentle breeze carries the sweet scent of wildflowers',
+        'actions' => [
+            'look' => ['The glowing mushrooms seams to be the legendary enchanted healing mushrooms, if you are feeling weak take a mushroom and use it on your self "me".', 'As you look around you notice spider web around the mushrooms the further you walk in the glen the more spider web there is, take a deep breath because north of you the spider\'s lair is waiting for you ready you sword.'],
+            'take' => ['mushroom' => 'You pick a mushroom from the ground.'],
+        ],
+        'connection' => ['north' => 'spider\'s_lair']
+    ],
+    'spider\'s_lair' => [
+        'description' => 'A web-strewn chamber, dimly lit by the bioluminescence fungi. Silken threads glisten in the half-light, hinting at the presence of its weaver. You tread carefully, mindful of the intricate traps set by its resident.',
+        'actions' => [
+            'look' => ['You look above you and se multiple red eyes, oh no the spider has spotted you, this is your chance attack the spider before it attacks you', 'North of you lies the exit of the lair, do you make a run for it'],
+            'attack' => [
+                'story' => [
+                    'You deftly maneuver, avoiding the spider\'s fangs and striking swiftly. The blade connects, delivering a decisive blow. The spider recoils, clearly wounded.',
+                    'In a tense exchange, you and spider clash with equal force. The spider\'s fangs snap dangerously, but your reflexes hold firm, preventing a successful strike.',
+                    'The spider lunges with surprising speed, sinking its fangs into the your arm. Pain shoots through your limb as you stagger back, narrowly avoiding a more serious injury. The spider eyes you hungrily, reveling in its momentary victory.'
+                ],
+                'kill' => 'The spider lies defeated, its menacing presence replaced by stillness. You stand victorious, the hideout now a silent witness to the battle\'s end.'
+            ]
+        ],
+        'connection' => ['north' => 'wise_owl\'s_perch']
+    ],
+    'wise_owl\'s_perch' => [
+        'description' => 'At the heart of a colossal tree, you find the cozy nest of a wise old owl. Moonlight filters through the leaves, illuminating shelves of ancient tomes. The owl regards you with keen, knowing eyes.',
+        'actions' => [
+            'look' => ['A feather, seemingly imbued with ancient magic, rests on a nearby book.'],
+            'take' => ['feather' => 'As you take the feather, the owl hoots softly, urging you to follow the path north.'],
+        ],
+        'connection' => ['north' => 'riddle_bridge']
+    ],
+    'riddle_bridge' => [
+        'description' => 'The Riddle Bridge spans the serene river, its ancient stones weathered by time. Moss and lichen cling to its surface, whispering secrets of old. Ask the bridge it\'s secrete.',
+        'actions' => [
+            'ask' => 'I\'m a bridge that plays a tricky game,
+            No matter which way you aim,
+            west, east, or north you stride,
+            the Fountain of Wisdom is where you will arrive',
+        ],
+        'connection' => ['west' => 'fountain_of_wisdom', 'east' => 'fountain_of_wisdom', 'north' => 'fountain_of_wisdom', 'south' => 'fountain_of_wisdom']
+    ],
+    'fountain_of_wisdom' => [
+        'description' => 'You have arrived at your destination. Before you stands the Fountain of Wisdom, a marvel of ancient craftsmanship. Crystal-clear water flows from the mouth of a wise stone visage, its eyes seeming to impart knowledge. The air hums with an electric charge.',
+    ],
 ];
