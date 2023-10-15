@@ -23,15 +23,15 @@ $itemRules = [
     'silver key' => [
         'room' => 'fountain_of_wisdom',
         'on' => 'ornate box',
-        'story' => 'With the small, ornate box in hand, you approach the Fountain of Wisdom. As you carefully place the box on the edge of the fountain, a soft, melodic hum fills the air. The gems on the box begin to glow, casting prismatic reflections across the water.
-
+        'story' => "With the small, ornate box in hand, you approach the Fountain of Wisdom. As you carefully place the box on the edge of the fountain, a soft, melodic hum fills the air. The gems on the box begin to glow, casting prismatic reflections across the water.
+        <br/><br/>
         With a sense of anticipation, you open the box. Inside, you find a brilliant, pulsating crystal, radiating with an ethereal light. As you hold it aloft, a wave of knowledge washes over you, filling your mind with ancient wisdom.
-        
+        <br/><br/>
         You have succeeded. You have found the legendary Fountain of Wisdom. The forest, once mysterious and foreboding, now feels like an old friend, its secrets unlocked. You carry the crystal with you, a beacon of enlightenment.
-        
+        <br/><br/>
         As you leave the enchanted forest, you are forever changed. The knowledge you gained will shape your destiny, and the memories of this mystical journey will forever reside in your heart.
-        
-        Congratulations, brave adventurer. You have completed your quest.'
+        <br/><br/>
+        Congratulations, brave adventurer. You have completed your quest."
     ]
 ];
 
@@ -41,6 +41,7 @@ if (!isset($_SESSION['player'])) {
         'inventory' => [],
         'prev_commands' => [],
         'health' => 100,
+        'enemies' => ['goblin' => 100],
     ];
 }
 
@@ -137,12 +138,10 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                     // check if there is a room the item has to be used in.
                     if (array_key_exists('room', $itemRules[$itemToUse])) {
                         if (isPlayerInRoom($itemRules[$itemToUse]['room'])) {
+                            addToStory($_POST['command'], $itemRules[$itemToUse]['story']);
+                        } else {
                             createErrorMsg("You seam to be in the wrong place to use $itemToUse");
-                            break;
                         }
-                    }
-                    if ($itemToUse === 'silver key' && $itemToUseOn === 'ornate box') {
-                        addToStory($_POST['command'], $itemRules[$itemToUse]['story']);
                     }
                 } else {
                     createErrorMsg("You are unable to use $itemToUse on $itemToUseOn");
@@ -164,6 +163,26 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             break;
         case 'attack':
             if (isPlayerInRoom('goblin\'s_hideout')) {
+                $victim = implode(' ', array_splice($command, 1));
+                if (array_key_exists(strtolower($victim), $_SESSION['player']['enemies'])) {
+                    $dominator = rand(0, 2);
+
+                    if ($dominator == 0) {
+                        // Player wins, subtract 20 from enemy's health
+                        $_SESSION['player']['enemies'][$victim] -= 20;
+                    } elseif ($dominator == 2) {
+                        // Enemy wins, subtract 20 from player's health
+                        $_SESSION['player']['health'] -= 20;
+                    }
+
+                    if ($_SESSION['player']['enemies'][$victim] <= 0) {
+                        addToStory($_POST['command'], $rooms[$_SESSION['player']['current_room']]['actions']['attack']['kill']);
+                    } else {
+                        addToStory($_POST['command'], $rooms[$_SESSION['player']['current_room']]['actions']['attack']['story'][$dominator]);
+                    }
+                } else {
+                    createErrorMsg("Who is $victim");
+                }
             } else {
                 createErrorMsg("Relax, no enemies nearby.");
             }
@@ -189,6 +208,17 @@ $roomTitle = ucwords(implode(' ', $titleExplode));
 
 require_once __DIR__ . '/header.php'; ?>
 <main>
+    <?php if ($_SESSION['player']['health'] <= 0) : ?>
+        <div class="over-container">
+            <div class="over-content">
+                <h1>Game over</h1>
+                <p>You where killed</p>
+                <form style="width: 100%;" method="post">
+                    <button type="submit" name="reset" class="brown-btn">New Game</button>
+                </form>
+            </div>
+        </div>
+    <?php endif; ?>
     <section class="player-info-container">
         <div class="player-info-child">
             <div class="player-info">

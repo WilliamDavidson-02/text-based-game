@@ -31,6 +31,10 @@ $rooms = [
         'description' => 'You find yourself standing at the entrance of the Goblin\'s Hideout, a dark and foreboding place nestled within the heart of the ancient forest. The air is thick with the earthy scent of moss and damp leaves, and the sounds of rustling leaves and distant animal calls echo through the trees.',
         'actions' => [
             'look' => ['In the center of the hideout, you spot the menacing figure of a goblin, its wiry form hunched over, guarding the passage that leads deeper into the forest. Its eyes gleam with a malevolent glint, and a wicked grin stretches across its twisted face. The creature brandishes a crude, serrated blade, clearly intent on preventing anyone from advancing further.'],
+            'attack' => [
+                'story' => ['You swiftly unsheathes their sword and lunges at the goblin. The blade connects, dealing a solid blow. The goblin grimaces, clearly wounded.', 'In a tense exchange, the player and goblin clash with equal force. Blades meet, but neither side gains the upper hand.', 'As the player lunges, the goblin anticipates and counters with a swift strike of its own. The blade finds its mark, delivering a sharp blow. The player staggers back, feeling the sting of the attack, while the goblin grins, seizing the upper hand in the skirmish.'],
+                'kill' => 'The goblin lies defeated, its menacing presence replaced by stillness. The player stands victorious, their breath steadying. The hideout is now a silent witness to the battle\'s end.'
+            ]
         ],
         'connection' => ['south' => 'whispering_grove']
     ],
