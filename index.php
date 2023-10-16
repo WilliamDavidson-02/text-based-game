@@ -19,6 +19,8 @@ $commands = [
     'room_interactions' => ['look', 'take', 'move']
 ];
 $errorMessage = isset($_SESSION['errorMessage']) ? $_SESSION['errorMessage'] : '';
+$isGameCompleted = false;
+$gamePoints = 0;
 $itemRules = [
     'silver key' => [
         'room' => 'fountain_of_wisdom',
@@ -161,6 +163,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                         if ($itemToUse === 'mushroom') {
                             $_SESSION['player']['health'] = 100;
                             addToStory($_POST['command'], $itemRules[$itemToUse]['story']);
+                            $_SESSION['player']['inventory'] = array_values(array_filter($_SESSION['player']['inventory'], function ($item) use ($itemToUse, $itemToUseOn) {
+                                return $item !== $itemToUse;
+                            }));
                         }
                     }
                 } else {
@@ -222,6 +227,28 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     exit;
 }
 
+if (isPlayerInRoom('fountain_of_wisdom')) {
+    foreach ($_SESSION['storyLine'] as $story) {
+        if ($story['story'] === $itemRules['silver key']['story']) {
+            $isGameCompleted = true;
+            break;
+        }
+    }
+}
+
+if ($isGameCompleted) {
+    // Calculate end game points
+    if ($_SESSION['player']['enemies']['goblin']['health'] <= 0) {
+        $gamePoints += 10;
+    }
+    if ($_SESSION['player']['enemies']['spider']['health'] <= 0) {
+        $gamePoints += 20;
+    }
+    if (in_array('feather', $_SESSION['player']['inventory'])) {
+        $gamePoints += 5;
+    }
+}
+
 // Redo current room string to a nice title.
 $titleExplode = explode('_', $_SESSION['player']['current_room']);
 $roomTitle = ucwords(implode(' ', $titleExplode));
@@ -241,6 +268,12 @@ require_once __DIR__ . '/header.php'; ?>
     <?php endif; ?>
     <section class="player-info-container">
         <div class="player-info-child">
+            <?php if ($isGameCompleted) : ?>
+                <div class="player-info">
+                    <h3>Game completed</h3>
+                    <div>Points: <?= $gamePoints; ?></div>
+                </div>
+            <?php endif; ?>
             <div class="player-info">
                 <h3>Player inventory</h3>
                 <?php foreach ($_SESSION['player']['inventory'] as $item) : ?>
