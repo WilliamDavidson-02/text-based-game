@@ -205,3 +205,27 @@ h1 {
   border-radius: 5px;
   background: var(--bg-color-light);
 }
+
+.word-card {
+  margin: 10px 0;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+
+.word-card span {
+  padding: 5px;
+  border: 1px solid var(--text-color-light);
+  border-radius: 5px;
+}
+
+.examples-container {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.examples-container span:first-child {
+  font-size: 1.2rem;
+  font-weight: 600;
+}

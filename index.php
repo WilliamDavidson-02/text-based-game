@@ -23,7 +23,7 @@ $itemRules = [
     'silver key' => [
         'room' => 'fountain_of_wisdom',
         'on' => 'ornate box',
-        'story' => "With the small, ornate box in hand, you approach the Fountain of Wisdom. As you carefully place the box on the edge of the fountain, a soft, melodic hum fills the air. The gems on the box begin to glow, casting prismatic reflections across the water.
+        'story' => "With the small, ornate box in hand, you approach the Fountain of Wisdom. As you carefully place the box on the edge of the fountain, a soft, melodic hum fills the air.
         <br/><br/>
         With a sense of anticipation, you open the box. Inside, you find a brilliant, pulsating crystal, radiating with an ethereal light. As you hold it aloft, a wave of knowledge washes over you, filling your mind with ancient wisdom.
         <br/><br/>
@@ -79,7 +79,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $actionType = $command[0]; // e.g move, look, take
     switch (strtolower($actionType)) {
         case 'move':
-            $action = $command[1]; // direction, e.g north
+            $action = trim($command[1]); // direction, e.g north
             if (array_key_exists(strtolower($action), $rooms[$_SESSION['player']['current_room']]['connection'])) {
                 $_SESSION['player']['current_room'] = $rooms[$_SESSION['player']['current_room']]['connection'][strtolower($action)];
                 addToStory($_POST['command'], $rooms[$_SESSION['player']['current_room']]['description']);
@@ -104,7 +104,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             // get item and remove action type from explode and implode item in to one word.
             $action = $rooms[$_SESSION['player']['current_room']]['actions'];
             if (array_key_exists(strtolower($actionType), $action)) {
-                $item = implode(' ', array_splice(explode(' ', $_POST['command']), 1));
+                $item = trim(implode(' ', array_splice(explode(' ', $_POST['command']), 1)));
                 if (array_key_exists($item, $action['take'])) {
                     if (!isSameStory($action['take'][$item])) {
                         addToStory($_POST['command'], $action['take'][$item]);
@@ -125,7 +125,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             $itemToUseOn = [];
             $wordFlag = false;
             foreach ($command as $word) {
-                $word = strtolower($word);
+                $word = trim(strtolower($word));
                 if ($word === 'use') {
                     $wordFlag = true;
                 } else if ($word === 'on') {
@@ -171,7 +171,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         case 'ask':
             if (array_key_exists('ask', $rooms[$_SESSION['player']['current_room']]['actions'])) {
                 // removes ask from string and gets the who it is directed to.
-                $question = implode(' ', array_splice(explode(' ', $_POST['command']), 1));
+                $question = trim(implode(' ', array_splice(explode(' ', $_POST['command']), 1)));
                 if (array_key_exists(strtolower($question), $rooms[$_SESSION['player']['current_room']]['actions']['ask'])) {
                     addToStory($_POST['command'], $rooms[$_SESSION['player']['current_room']]['actions']['ask'][strtolower($question)]);
                 } else {
@@ -182,7 +182,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             }
             break;
         case 'attack':
-            $victim = implode(' ', array_splice($command, 1));
+            $victim = trim(implode(' ', array_splice($command, 1)));
             if (isPlayerInRoom($_SESSION['player']['enemies'][$victim]['room'])) {
                 if (array_key_exists(strtolower($victim), $_SESSION['player']['enemies'])) {
                     $dominator = rand(0, 2);
@@ -252,6 +252,24 @@ require_once __DIR__ . '/header.php'; ?>
                 <?php foreach ($_SESSION['player']['prev_commands'] as $command) : ?>
                     <div class="small-dark-tx"><?= $command; ?></div>
                 <?php endforeach; ?>
+            </div>
+            <div class="player-info">
+                <h3>Game commands</h3>
+                <div class="word-card">
+                    <span>Move</span>
+                    <span>Look</span>
+                    <span>Take</span>
+                    <span>Ask</span>
+                    <span>Attack</span>
+                    <span>Use</span>
+                </div>
+                <div class="examples-container">
+                    <span>Examples</span>
+                    <span><strong>move</strong> north</span>
+                    <span><strong>attack</strong> enemy</span>
+                    <span><strong>take</strong> item</span>
+                    <span><strong>use</strong> item <strong>on</strong> another item</span>
+                </div>
             </div>
         </div>
         <form method="post">

@@ -81,5 +81,8 @@ $rooms = [
     ],
     'fountain_of_wisdom' => [
         'description' => 'You have arrived at your destination. Before you stands the Fountain of Wisdom, a marvel of ancient craftsmanship. Crystal-clear water flows from the mouth of a wise stone visage, its eyes seeming to impart knowledge. The air hums with an electric charge.',
+        'actions' => [
+            'look' => ['As you step into the room, a soft, ethereal glow emanates from the crystal atop the ornate box in your inventory. It catches your attention, casting an enchanting light across the room. The box, with its intricate carvings and polished surface, seems to beckon to you. It\'s as if the presence of the Fountain of Wisdom has awakened some hidden magic within it. Now might be the perfect moment to try opening it, perhaps with the silver key you possess.']
+        ]
     ],
 ];
