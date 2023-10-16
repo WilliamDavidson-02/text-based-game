@@ -169,11 +169,11 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             }
             break;
         case 'ask':
-            if (isPlayerInRoom('whispering_grove')) {
+            if (array_key_exists('ask', $rooms[$_SESSION['player']['current_room']]['actions'])) {
                 // removes ask from string and gets the who it is directed to.
                 $question = implode(' ', array_splice(explode(' ', $_POST['command']), 1));
-                if (strtolower($question) === 'trees') {
-                    addToStory($_POST['command'], $rooms[$_SESSION['player']['current_room']]['actions']['ask']);
+                if (array_key_exists(strtolower($question), $rooms[$_SESSION['player']['current_room']]['actions']['ask'])) {
+                    addToStory($_POST['command'], $rooms[$_SESSION['player']['current_room']]['actions']['ask'][strtolower($question)]);
                 } else {
                     createErrorMsg("Who is $question ?");
                 }

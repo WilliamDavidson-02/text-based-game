@@ -22,8 +22,8 @@ $rooms = [
         'actions' => [
             'look' => ['A stone pedestal at the center of the grove holds a mysterious, ornate box.'],
             'take' => ['ornate box' => 'You picked up the ornate box, the box is locked.'],
-            'ask' => 'I\'m where the compass points, where the cold winds blow,
-            In the direction where the polar lights glow.'
+            'ask' => ['trees' => 'I\'m where the compass points, where the cold winds blow,
+            In the direction where the polar lights glow.']
         ],
         'connection' => ['east' => 'mystical_clearing', 'north' => 'goblin\'s_hideout']
     ],
@@ -72,10 +72,10 @@ $rooms = [
     'riddle_bridge' => [
         'description' => 'The Riddle Bridge spans the serene river, its ancient stones weathered by time. Moss and lichen cling to its surface, whispering secrets of old. Ask the bridge it\'s secrete.',
         'actions' => [
-            'ask' => 'I\'m a bridge that plays a tricky game,
+            'ask' => ['bridge' => 'I\'m a bridge that plays a tricky game,
             No matter which way you aim,
             west, east, or north you stride,
-            the Fountain of Wisdom is where you will arrive',
+            the Fountain of Wisdom is where you will arrive'],
         ],
         'connection' => ['west' => 'fountain_of_wisdom', 'east' => 'fountain_of_wisdom', 'north' => 'fountain_of_wisdom', 'south' => 'fountain_of_wisdom']
     ],
